@@ -1,16 +1,18 @@
 import React from 'react';
+// import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Header from '../components/header';
 import '../style/home.css';
-import Weather from './weather';
 
 class Home extends React.Component {
     render() {
         return (
-            <div className="home">
-                home page
-                <Weather></Weather>
-            </div>
+           <div>
+               <Header />
+               
+           </div>
         )
     }
 }
+
 
 export default Home;

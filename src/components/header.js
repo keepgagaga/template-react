@@ -1,16 +1,34 @@
-import React from 'react';
+import { Component } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link, } from "react-router-dom";
 import logo from '../logo.svg';
+import Cnode from '../pages/cnode';
 import '../style/header.css';
 
-class Header extends React.Component {
+
+
+class Header extends Component {
     render() {
         return (
-            <div className="header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <span>这里是 React 页面，用来测试 React 的特性</span>
-            </div>
+            <Router>
+
+            <Switch>
+                <Route exact path="/" children={ <Icon /> }></Route>
+                <Route exact path="/cnode" children={ <Cnode /> }></Route>
+            </Switch>
+
+            </Router>
         )
     }
+}
+
+function Icon() {
+    return (
+        <div>
+            <img src={logo} className="App-logo" alt="logo" />
+            <span>React</span>
+            <Link to="/cnode">Cnode</Link>
+        </div>
+    )
 }
 
 export default Header;
