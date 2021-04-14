@@ -1,16 +1,23 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch, Link, useParams } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link, Redirect, useParams } from "react-router-dom";
 import '../style/cnode.css';
 import axios from "axios";
 
+let baseUrl = 'https://cnodejs.org/api/v1/';
 
 class Cnode extends Component {
     render() {
         return (
             <Router>
             <div className="cnode">
-                <CnodeHeader></CnodeHeader>
-                <CnodeBody></CnodeBody>
+                
+                <Switch>
+                    <Route path="/cnode">
+                        <CnodeHeader></CnodeHeader>
+                        <CnodeBody></CnodeBody>
+                    </Route>
+                    <Route path="/topic/:id" component={ TopicDetail }></Route>
+                </Switch>
             </div>
             </Router>
         )
@@ -41,8 +48,6 @@ class CnodeBody extends Component {
 
     
  getTopics() {
-    let baseUrl = 'https://cnodejs.org/api/v1/';
-
     axios.get(baseUrl + 'topics')
         .then(res => {
             console.log(res, 'get topics res');
@@ -72,22 +77,43 @@ class CnodeBody extends Component {
 function TopicItem(topic) {
     return (
         <div key={topic.id} className="topic">
-            <Link to={ '/:' + topic.id } style={{ textDecoration: 'none', color: 'black' }} >{ topic.title }</Link>
-            <Switch>
-                <Route path='/:id' children={ <TopicDetail /> }></Route>
-            </Switch>
+            <Link to={ 'topic/' + topic.id } style={{ textDecoration: 'none', color: 'black' }} >{ topic.title }</Link>
         </div>
     )
 }
 
-function TopicDetail() {
-    let {id} = useParams();
+class TopicDetail extends Component {
 
-    return (
-        <div>
-            ID: { id }
-        </div>
-    )
+    constructor(props) {
+        super(props);
+        this.state = {
+            topic: {}
+        }
+        this.getTopic = this.getTopic.bind(this);
+    }
+
+    componentDidMount() {
+        this.getTopic();
+    }
+
+    getTopic() {
+        axios.get(baseUrl + 'topic/' + this.props.match.params.id)
+        .then(res => {
+            console.log(res, 'get topic res');
+            this.setState({
+                topic: res.data.data.content,
+            })
+        })
+    }
+
+    render() {
+      
+        return (
+            <div>
+                <div dangerouslySetInnerHTML={{ __html: this.state.topic }}></div>
+            </div>
+        )
+    }
 }
 
 export default Cnode;
