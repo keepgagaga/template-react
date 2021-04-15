@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch, Link, Redirect, useParams } from "react-router-dom";
+import { HashRouter as Router, Route, Switch, Link, } from "react-router-dom";
 import '../style/cnode.css';
 import axios from "axios";
 
